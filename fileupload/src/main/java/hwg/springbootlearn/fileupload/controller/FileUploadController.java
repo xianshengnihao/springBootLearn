@@ -1,5 +1,6 @@
 package hwg.springbootlearn.fileupload.controller;
 
+import hwg.springbootlearn.FileUploadThread;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +19,6 @@ import java.util.UUID;
  */
 @Controller
 public class FileUploadController {
-    SimpleDateFormat smpl = new SimpleDateFormat("yyyy-MM-dd");
     @PostMapping("/upload")
     @ResponseBody
     //MultipartFile 变量名必须与前端nanme属性中名字一致，有点傻
@@ -26,8 +26,7 @@ public class FileUploadController {
         if(file==null){
             return "文件上传失败";
         }
-//        String realpath =req.getServletContext().getRealPath("/img")+smpl.format(new Date());
-        File floder = new File("E:\\img");
+        File floder = new File("E:/img");
         if(!floder.exists()){
             floder.mkdir();
         }
@@ -40,8 +39,24 @@ public class FileUploadController {
             e.printStackTrace();
         }
         return "error";
+    }
 
-
+    @PostMapping("/uploads")
+    @ResponseBody
+    //MultipartFile 变量名必须与前端nanme属性中名字一致，有点傻
+    public String fileUploads(MultipartFile[] files, HttpServletRequest req){
+        if(files==null){
+            return "文件上传失败";
+        }
+        File floder = new File("E:/img");
+        if(!floder.exists()){
+            floder.mkdir();
+        }
+        for (MultipartFile file : files) {
+            FileUploadThread fileUploadThread = new FileUploadThread(file,floder);
+            new Thread(fileUploadThread).start();
+        }
+        return "success";
     }
 
 
