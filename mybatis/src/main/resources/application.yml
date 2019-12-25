@@ -1,0 +1,9 @@
+datasource:
+  driverClassName: com.mysql.jdbc.Driver
+  initialSize: 1
+  maxActive: 20
+  maxWait: 6000
+  url: jdbc:mysql://127.0.0.1:3306/springbootlearn
+  userName: root
+  password: root
+
